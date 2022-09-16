@@ -1,3 +1,4 @@
 /.idea/
 /negoocio/build/
 *.class
+/.gradle/
