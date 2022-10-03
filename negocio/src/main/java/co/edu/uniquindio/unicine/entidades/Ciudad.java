@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 public class Ciudad implements Serializable {
@@ -23,8 +22,13 @@ public class Ciudad implements Serializable {
     @Column(nullable = false, length = 100)
     private String nombre;
 
+    @ToString.Exclude
     @OneToMany (mappedBy = "ciudad")
-    private List<Cliente> clientes;
+    @Column(nullable = false)
+    private List<Teatro> teatros;
 
-
+    @Builder
+    public Ciudad(String nombre) {
+        this.nombre = nombre;
+    }
 }

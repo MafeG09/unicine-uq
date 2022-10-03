@@ -5,29 +5,39 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
+
 
 @Entity
-@Getter
-@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@ToString
-
+@ToString(callSuper = true)
 public class Cliente extends Persona implements Serializable{
 
-    @Column(length = 150, nullable = false,unique = true)
-    private String email;
+    @Column(nullable = false, length =100)
+    private String nombre;
+    @Column(nullable = false, length = 200)
+    private String urlFoto;
 
+    @Column(nullable = false)
+    private boolean estado;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "cliente")
+    private List<CuponCliente> cuponClientes;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "cliente")
+    private List<Compra> compras;
     @ElementCollection
-    private Map<String,String> telefonos;
+    private List<String> telefonos;
 
-    @ManyToOne
-    private Ciudad ciudad;
+    @Builder
 
-    @OneToMany (mappedBy = "cliente")
-    private List<Prestamo> prestamos;
+    public Cliente(String nombre, String correo, String password, String urlFoto, List<String> telefonos) {
+        super(correo, password);
+        this.nombre = nombre;
+        this.urlFoto = urlFoto;
+        this.estado = false;
+        this.telefonos = telefonos;
 
-
-
+    }
 }

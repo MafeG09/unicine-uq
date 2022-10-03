@@ -2,3 +2,4 @@
 /negoocio/build/
 *.class
 /.gradle/
+/src/

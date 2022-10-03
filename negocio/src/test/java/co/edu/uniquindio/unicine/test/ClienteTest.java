@@ -1,23 +1,27 @@
 package co.edu.uniquindio.unicine.test;
 
 import co.edu.uniquindio.unicine.entidades.Cliente;
+import co.edu.uniquindio.unicine.entidades.Compra;
+import co.edu.uniquindio.unicine.entidades.Cupon;
 import co.edu.uniquindio.unicine.repo.ClienteRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class PersistenciaTest {
+public class ClienteTest {
 
     @Autowired
     private ClienteRepo clienteRepo;
@@ -73,7 +77,7 @@ public class PersistenciaTest {
        List<Cliente> lista = clienteRepo.findAll();
        lista.forEach(System.out::println); //Paradigma programacion funcional
     }
-
+////////////////////////////////////////////////////////////////////////////////////
     @Test
     @Sql("classpath:dataset.sql")
     public void obtenerPorCorreo() {
@@ -121,5 +125,32 @@ public class PersistenciaTest {
         lista.forEach(System.out::println); //Paradigma programacion funcional
     }
 
-    
+    @Test
+    @Sql("classpath:dataset.sql")
+    public void obtenerCompra(){
+
+        List<Compra> compras = clienteRepo.obtenerCompraIn("pepe@email.com");
+        compras.forEach(System.out::println);
+    }
+
+    @Test
+    @Sql("classpath:dataset.sql")
+    public void obtenerCupones(){
+
+        List<Cupon> cupones = clienteRepo.obtenerCupones("pepe@email.com");
+        //cupones.forEach(System.out::println);
+        Assertions.assertEquals(1, cupones.size()); //Numero de cupones que le corresponden a ese email
+    }
+
+    @Test
+    @Sql("classpath:dataset.sql")
+    public void obtenerComprasPorCliente() {
+
+        //List<Compra> compras = clienteRepo.obtenerCompraClientes();
+        List<Object[]> compras = clienteRepo.obtenerCompraClientesLeftJoin();
+        compras.forEach( o ->
+                System.out.println(o[0] + " , " + o[1])); //Si en la colsutas hay mas aspectos separados por , se concatenan mas posiciones
+    }
+
+
 }
